@@ -38,6 +38,8 @@ export function RegisterShop() {
   const [location, setLocation] = useState(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleAddService = () => {
     setServices([...services, { service: "", price: "" }]);
@@ -93,24 +95,66 @@ export function RegisterShop() {
     setQuery(suggestion.display_name);
   };
 
+  const handleForm = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get("shop-name"),
+      location: query,
+      type: shopType,
+      mobile: formData.get("mobile"),
+      email: formData.get("email"),
+      openingTime,
+      closingTime,
+      services,
+    };
+
+    console.log(data);
+
+    try {
+      const response = await fetch("http://localhost:3000/register-shop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      setSuccess("Shop registered successfully!");
+      setError("");
+    } catch (error) {
+      setError(`Error: ${error.message}`);
+      setSuccess("");
+    }
+  };
+
   return (
     <main className="flex-1 bg-muted/10 py-8 px-4 md:px-6">
       <div className="container mx-auto">
         <div className="bg-white shadow-md rounded-lg p-6 mb-8">
           <h1 className="text-2xl font-bold mb-4">Shop Registration</h1>
-          <form onSubmit={(e) => e.preventDefault()} className="grid gap-6">
+          {error && <div className="text-red-500 mb-4">{error}</div>}
+          {success && <div className="text-green-500 mb-4">{success}</div>}
+          <form onSubmit={handleForm} className="grid gap-6">
             <div className="grid gap-2">
               <Label htmlFor="shop-name">Shop Name</Label>
-              <Input id="shop-name" type="text" placeholder="Enter shop name" />
+              <Input id="shop-name" name="shop-name" type="text" placeholder="Enter shop name" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="location">Location</Label>
               <Input
                 id="location"
+                name="location"
                 type="text"
                 value={query}
                 onChange={handleLocationChange}
                 placeholder="Search for location"
+                required
               />
               {/* Autocomplete suggestions */}
               {suggestions.length > 0 && (
@@ -164,17 +208,17 @@ export function RegisterShop() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="mobile">Mobile Number</Label>
-                <Input id="mobile" type="tel" placeholder="Enter shop mobile number" />
+                <Input id="mobile" name="mobile" type="tel" placeholder="Enter shop mobile number" required />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="Enter shop email" />
+                <Input id="email" name="email" type="email" placeholder="Enter shop email" required />
               </div>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="opening-time">Opening Time</Label>
-                <Input id="opening-time" type="time" value={openingTime} onChange={handleOpeningTimeChange} />
+                <Input id="opening-time" name="opening-time" type="time" value={openingTime} onChange={handleOpeningTimeChange} required />
                 <div className="text-sm text-muted-foreground">
                   {new Date(`2000-01-01T${openingTime}:00`).toLocaleString("en-US", {
                     hour: "numeric",
@@ -185,7 +229,7 @@ export function RegisterShop() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="closing-time">Closing Time</Label>
-                <Input id="closing-time" type="time" value={closingTime} onChange={handleClosingTimeChange} />
+                <Input id="closing-time" name="closing-time" type="time" value={closingTime} onChange={handleClosingTimeChange} required />
                 <div className="text-sm text-muted-foreground">
                   {new Date(`2000-01-01T${closingTime}:00`).toLocaleString("en-US", {
                     hour: "numeric",
@@ -203,6 +247,7 @@ export function RegisterShop() {
                     <div key={index} className="flex flex-col gap-4 md:flex-row md:items-center">
                       <Input
                         id={`service-${index}`}
+                        name={`service-${index}`}
                         type="text"
                         placeholder="Service"
                         value={service.service}
@@ -210,6 +255,7 @@ export function RegisterShop() {
                       />
                       <Input
                         id={`price-${index}`}
+                        name={`price-${index}`}
                         type="text"
                         placeholder="Price"
                         value={service.price}
@@ -241,9 +287,9 @@ export function RegisterShop() {
                 </div>
               </div>
             </div>
-            <Button type="submit" className="w-full mt-4">
+            <button type="submit" className="w-full bg-black rounded text-white">
               Register Shop
-            </Button>
+            </button>
           </form>
         </div>
       </div>
