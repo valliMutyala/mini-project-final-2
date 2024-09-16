@@ -294,5 +294,6 @@ export function RegisterShop() {
         </div>
       </div>
     </main>
+    
   );
 }
