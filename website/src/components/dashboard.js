@@ -1,4 +1,5 @@
-import { BriefcaseIcon, CarIcon, HomeIcon, HospitalIcon, LuggageIcon, MenuIcon, SchoolIcon, SearchIcon, ShoppingBagIcon} from "lucide-react";
+import {   Brush,CarIcon, HomeIcon, HospitalIcon, LuggageIcon, Utensils, SchoolIcon, SearchIcon, ShoppingBagIcon} from "lucide-react";
+
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -84,12 +85,12 @@ export default function Dashboard() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link
-              to="category/restaruants"
+              to="category/food"
               className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center gap-2 hover:bg-accent hover:text-accent-foreground transition-colors"
             
             >
-              <MenuIcon className="h-8 w-8" />
-              <span className="text-sm font-medium">Restaurants</span>
+              <Utensils className="h-8 w-8" />
+              <span className="text-sm font-medium">Food</span>
             </Link>
             <Link
               to="category/Shopping"
@@ -124,12 +125,12 @@ export default function Dashboard() {
               <span className="text-sm font-medium">Home Services</span>
             </Link>
             <Link
-              to="category/business"
+              to="category/beauty-skincare"
               className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center gap-2 hover:bg-accent hover:text-accent-foreground transition-colors"
             
             >
-              <BriefcaseIcon className="h-8 w-8" />
-              <span className="text-sm font-medium">Business</span>
+              < Brush  className="h-8 w-8" />
+              <span className="text-sm font-medium">Beauty & Skincare</span> 
             </Link>
             <Link
               to="category/education"
