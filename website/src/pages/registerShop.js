@@ -102,49 +102,36 @@ export function RegisterShop() {
   const handleForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const convertToBase64 = (imageFile) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-          resolve(base64String);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(imageFile);
-      });
-    };
-  
-    const images = await Promise.all(
-      formData.getAll('photos').map(image => convertToBase64(image))
-    );
-  
-    const data = {
-      name: formData.get("shop-name"),
-      location: query,  
-      type: shopType,   
-      mobile: formData.get("mobile"),
-      email: formData.get("email"),
-      openingTime,
-      closingTime,
-      services,
-      images 
-    };
-  
+    const photos = formData.getAll('photos');
+    photos.forEach((photo) => {
+      formData.append('shopimages', photo);
+    });
+    formData.append("shopname", formData.get("shop-name"));
+    formData.append("location", query);
+    formData.append("shoptype", shopType);
+    formData.append("mobilenumber", formData.get("mobile"));
+    formData.append("email", formData.get("email"));
+    formData.append("opentime", openingTime);
+    formData.append("closetime", closingTime);
+    services.forEach((service, index) => {
+      formData.append(`services[${index}][name]`, service.name);
+      formData.append(`services[${index}][price]`, service.price);
+    });
+
+    console.log(formData.get('photos'));
+
     try {
       const response = await fetch("http://localhost:3000/shopregister", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data), 
+        body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const result = await response.json();
-      console.log(result)
+      console.log(result);
       setSuccess("Shop registered successfully!");
       setError("");
     } catch (error) {
@@ -152,7 +139,7 @@ export function RegisterShop() {
       setSuccess("");
     }
   };
-  
+
 
   return (
     <main className="flex-1 bg-muted/10 py-8 px-4 md:px-6">
