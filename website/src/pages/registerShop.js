@@ -181,7 +181,7 @@ export function RegisterShop() {
                     <RecenterAutomatically location={location} />
                   </MapContainer>
                 ) : (
-                  <h2>Loading Maps...</h2>
+                  <h2>Loading maps...</h2>
                 )}
               </div>
             </div>
