@@ -130,8 +130,6 @@ export function RegisterShop() {
       images 
     };
   
-    console.log(data);  // Check data structure
-  
     try {
       const response = await fetch("http://localhost:3000/shopregister", {
         method: "POST",
