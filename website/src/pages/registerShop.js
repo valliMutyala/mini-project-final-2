@@ -25,6 +25,8 @@ function RecenterAutomatically({ location }) {
         animate: true,
       });
     }
+
+    console.log(location);
   }, [location, map]);
 
   return null;
@@ -144,6 +146,7 @@ export function RegisterShop() {
       }
   
       const result = await response.json();
+      console.log(result)
       setSuccess("Shop registered successfully!");
       setError("");
     } catch (error) {
@@ -213,10 +216,14 @@ export function RegisterShop() {
                     <SelectValue placeholder="Select shop type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                    <SelectItem value="retail">Retail</SelectItem>
-                    <SelectItem value="service">Service</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="food">Food</SelectItem>
+                    <SelectItem value="education">Education</SelectItem>
+                    <SelectItem value="automotive">Automotive</SelectItem>
+                    <SelectItem value="home-service">Home service</SelectItem>
+                    <SelectItem value="beauty-skincare">Beauty & Skincare</SelectItem>
+                    <SelectItem value="healthcare">Healthcare</SelectItem>
+                    <SelectItem value="travel">Travel</SelectItem>
+                    <SelectItem value="shopping">Shopping</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
