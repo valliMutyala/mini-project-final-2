@@ -62,13 +62,15 @@ app.post('/login',async (req,res)=>{
 
 
 app.post('/shopregister',async(req,res)=>{
-    const newShop=new Shop(req.body);
-    try{
-        const savedShop =await newShop.save();
-        res.status(201).json(savedShop)
-    }catch(err){
-        res.status(400).json({message:err.message})
-    }
+    const {images} = req.body;
+    console.log(images)
+    // const newShop=new Shop(req.body);
+    // try{
+    //     const savedShop =await newShop.save();
+    //     res.status(201).json(savedShop)
+    // }catch(err){
+    //     res.status(400).json({message:err.message})
+    // }
 })
 
 

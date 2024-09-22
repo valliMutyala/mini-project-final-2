@@ -95,35 +95,54 @@ export function RegisterShop() {
     setQuery(suggestion.display_name);
   };
 
+
+
   const handleForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const convertToBase64 = (imageFile) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+          resolve(base64String);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(imageFile);
+      });
+    };
+  
+    const images = await Promise.all(
+      formData.getAll('photos').map(image => convertToBase64(image))
+    );
+  
     const data = {
       name: formData.get("shop-name"),
-      location: query,
-      type: shopType,
+      location: query,  
+      type: shopType,   
       mobile: formData.get("mobile"),
       email: formData.get("email"),
       openingTime,
       closingTime,
       services,
+      images 
     };
-
-    console.log(data);
-
+  
+    console.log(data);  // Check data structure
+  
     try {
-      const response = await fetch("http://localhost:3000/register-shop", {
+      const response = await fetch("http://localhost:3000/shopregister", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data), 
       });
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+  
       const result = await response.json();
       setSuccess("Shop registered successfully!");
       setError("");
@@ -132,6 +151,7 @@ export function RegisterShop() {
       setSuccess("");
     }
   };
+  
 
   return (
     <main className="flex-1 bg-muted/10 py-8 px-4 md:px-6">
@@ -143,7 +163,7 @@ export function RegisterShop() {
           <form onSubmit={handleForm} className="grid gap-6">
             <div className="grid gap-2">
               <Label htmlFor="shop-name">Shop Name</Label>
-              <Input id="shop-name" name="shop-name" type="text" placeholder="Enter shop name" required />
+              <Input id="shop-name" name="shop-name" type="text" placeholder="Enter shop name" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="location">Location</Label>
@@ -154,7 +174,7 @@ export function RegisterShop() {
                 value={query}
                 onChange={handleLocationChange}
                 placeholder="Search for location"
-                required
+
               />
               {/* Autocomplete suggestions */}
               {suggestions.length > 0 && (
@@ -202,23 +222,23 @@ export function RegisterShop() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="photos">Shop Photos</Label>
-                <Input id="photos" type="file" multiple />
+                <Input id="photos" name="photos" type="file" multiple />
               </div>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="mobile">Mobile Number</Label>
-                <Input id="mobile" name="mobile" type="tel" placeholder="Enter shop mobile number" required />
+                <Input id="mobile" name="mobile" type="tel" placeholder="Enter shop mobile number" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="Enter shop email" required />
+                <Input id="email" name="email" type="email" placeholder="Enter shop email" />
               </div>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="opening-time">Opening Time</Label>
-                <Input id="opening-time" name="opening-time" type="time" value={openingTime} onChange={handleOpeningTimeChange} required />
+                <Input id="opening-time" name="opening-time" type="time" value={openingTime} onChange={handleOpeningTimeChange} />
                 <div className="text-sm text-muted-foreground">
                   {new Date(`2000-01-01T${openingTime}:00`).toLocaleString("en-US", {
                     hour: "numeric",
@@ -229,7 +249,7 @@ export function RegisterShop() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="closing-time">Closing Time</Label>
-                <Input id="closing-time" name="closing-time" type="time" value={closingTime} onChange={handleClosingTimeChange} required />
+                <Input id="closing-time" name="closing-time" type="time" value={closingTime} onChange={handleClosingTimeChange} />
                 <div className="text-sm text-muted-foreground">
                   {new Date(`2000-01-01T${closingTime}:00`).toLocaleString("en-US", {
                     hour: "numeric",
@@ -294,6 +314,6 @@ export function RegisterShop() {
         </div>
       </div>
     </main>
-    
+
   );
 }
