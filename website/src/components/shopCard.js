@@ -1,10 +1,11 @@
-import { StarIcon } from "lucide-react";
+import { ArrowLeft, StarIcon } from "lucide-react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 
-export function ShopCard({id, name, categories, rating, reviews, image }) {
-    return (
+export function ShopCard({ id, name, categories, rating, reviews, image }) {
+  return (
+    <>
       <Card className="bg-white shadow-md rounded-lg p-4">
         <div className="flex items-center gap-4">
           <img
@@ -32,12 +33,11 @@ export function ShopCard({id, name, categories, rating, reviews, image }) {
         </div>
         <div className="mt-4 flex flex-col gap-2">
           <Link to={`/shop/${id}`} >
-          <Button size="sm" className="w-full">
-            Visit
-          </Button>
+            <Button size="sm" className="w-full">
+            </Button>
           </Link>
         </div>
       </Card>
-    );
-  }
-  
+    </>
+  );
+}

@@ -1,11 +1,20 @@
 
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../components/ui/carousel"
 import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
-import { StarIcon } from "lucide-react"
+import { ArrowLeft, StarIcon } from "lucide-react"
+import CommentBox from "../components/CommentBox"
+import { Color } from "maplibre-gl"
+import { Link } from "react-router-dom"
 
 export default function Shop() {
   return (
+    <>
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+    <button style={{backgroundColor : "black", borderRadius : "30px", width : "40px", display : "grid", placeContent : "center"}}>
+    <Link to={'/'}>
+    <ArrowLeft style={{color : "white"}}/>
+    </Link>
+    </button>
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h1 className="text-3xl font-bold">The Cozy Corner</h1>
@@ -67,6 +76,7 @@ export default function Shop() {
         </div>
       </div>
       <div className="mt-12">
+      <CommentBox/>
         <h2 className="text-2xl font-bold">Customer Reviews</h2>
         <div className="mt-6 grid gap-6">
           <div className="flex gap-4">
@@ -140,5 +150,6 @@ export default function Shop() {
         </div>
       </div>
     </div>
+    </>
   )
 }

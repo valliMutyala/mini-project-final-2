@@ -121,7 +121,7 @@ export function RegisterShop() {
     console.log(formData.get('photos'));
 
     try {
-      const response = await fetch("http://localhost:3000/shopregister", {
+      const response = await fetch("http://localhost:3001/shopregister", {
         method: "POST",
         body: formData,
       });
