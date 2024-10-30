@@ -82,54 +82,26 @@ export default function () {
                   communities.
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <img
-                    src="/placeholder.svg"
-                    width="100"
-                    height="100"
-                    alt="Team Member"
-                    className="rounded-full"
-                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                  />
-                  <h3 className="text-lg font-semibold">John Doe</h3>
-                  <p className="text-muted-foreground">Co-Founder</p>
+                  <h3 className="text-lg font-semibold">Valli</h3>
+                  <p className="text-muted-foreground">Lead</p>
                 </div>
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <img
-                    src="/placeholder.svg"
-                    width="100"
-                    height="100"
-                    alt="Team Member"
-                    className="rounded-full"
-                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                  />
-                  <h3 className="text-lg font-semibold">Jane Smith</h3>
-                  <p className="text-muted-foreground">Co-Founder</p>
+                  <h3 className="text-lg font-semibold">Madhan</h3>
+                  <p className="text-muted-foreground">Team Member</p>
                 </div>
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <img
-                    src="/placeholder.svg"
-                    width="100"
-                    height="100"
-                    alt="Team Member"
-                    className="rounded-full"
-                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                  />
-                  <h3 className="text-lg font-semibold">Michael Johnson</h3>
-                  <p className="text-muted-foreground">Lead Developer</p>
+                  <h3 className="text-lg font-semibold">Chandana</h3>
+                  <p className="text-muted-foreground">Team Member</p>
                 </div>
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <img
-                    src="/placeholder.svg"
-                    width="100"
-                    height="100"
-                    alt="Team Member"
-                    className="rounded-full"
-                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                  />
-                  <h3 className="text-lg font-semibold">Emily Williams</h3>
-                  <p className="text-muted-foreground">Community Manager</p>
+                  <h3 className="text-lg font-semibold">Harshitha</h3>
+                  <p className="text-muted-foreground">Team Member</p>
+                </div>
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <h3 className="text-lg font-semibold">Chaitanya</h3>
+                  <p className="text-muted-foreground">Team Member</p>
                 </div>
               </div>
             </div>
