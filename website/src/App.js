@@ -20,8 +20,8 @@ function App() {
               <Route index element={<Dashboard/>} />
               <Route path='/login' element={<Login/>}/>
               <Route path='/signup' element={<Register/>}/>
-              <Route path='about' element={<About/>} />
-              <Route path='contact' element={<Contact/>} />
+              <Route path='/about' element={<About/>} />
+              <Route path='/contact' element={<Contact/>} />
               <Route path='/shop/:id' element={<Shop/>} />
               <Route path="/category" element={<Category/>}>
                 <Route path=':id' element={<h1>Madhan</h1>}/>
