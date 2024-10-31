@@ -1,66 +1,17 @@
 import { ArrowLeftIcon, Diameter, StarIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ShopCard } from "../components/shopCard.js";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Slider } from "../components/ui/slider.jsx";
+import { ShopsContext } from "../context/shopsContext.js";
+
 
 
 export function Category() {
-  const [shops, setShops] = useState([]);
-  const demoData = [
-    {
-      "id": 1,
-      "name": "Acme Shopping Mall",
-      "categories": ["Clothing", "Accessories", "Electronics"],
-      "rating": 4.8,
-      "reviews": 120,
-      "image": "/placeholder.svg"
-    },
-    {
-      "id": 2,
-      "name": "Bloom Boutique",
-      "categories": ["Women's Fashion", "Accessories"],
-      "rating": 4.6,
-      "reviews": 85,
-      "image": "/placeholder.svg"
-    },
-    {
-      "id": 3,
-      "name": "Tech Gadgets",
-      "categories": ["Electronics", "Gadgets", "Accessories"],
-      "rating": 4.4,
-      "reviews": 72,
-      "image": "/placeholder.svg"
-    },
-    {
-      "id": 4,
-      "name": "Furniture Emporium",
-      "categories": ["Home Decor", "Furniture", "Lighting"],
-      "rating": 4.7,
-      "reviews": 92,
-      "image": "/placeholder.svg"
-    },
-    {
-      "id": 5,
-      "name": "Apparel Outlet",
-      "categories": ["Clothing", "Shoes", "Accessories"],
-      "rating": 4.5,
-      "reviews": 105,
-      "image": "/placeholder.svg"
-    },
-    {
-      "id": 6,
-      "name": "Jewelry Boutique",
-      "categories": ["Jewelry", "Watches", "Accessories"],
-      "rating": 4.8,
-      "reviews": 68,
-      "image": "/placeholder.svg"
-    }
-  ]
 
-  useEffect(() => {
-    setShops(() => demoData)
-  }, [])
+  const category = useParams().id;
+
+  const shops = useContext(ShopsContext);
   
   const [distance, setDistance] = useState([0, 10]);
 
@@ -69,7 +20,6 @@ export function Category() {
   };
 
   return (
-    
     <>
       <main className="flex-1 bg-muted/10 py-8 px-4 md:px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
@@ -146,15 +96,23 @@ export function Category() {
               <h1 className="text-2xl font-bold ml-auto">Available</h1>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {shops.map(shop => <ShopCard
-                key={shop.id}
-                id={shop.id}
-                name={shop.name}
-                categories={shop.categories}
-                rating={shop.rating}
-                reviews={shop.reviews}
+              {shops.filter(shop => shop.shoptype == category).map((shop, index)=> <ShopCard
+                key={shop.id || index}
+                id={shop.id || index}
+                name={shop.shopname}
+                categories={shop.shoptype}
+                rating={shop.rating || 4}
+                reviews={shop.reviews || 10}
                 image={shop.image}
-              />)}
+              />) }
+
+              {shops.filter(shop => shop.shoptype == category).length === 0 && (
+                <div className="col-span-full text-center text-gray-500">
+                  <Diameter className="h-16 w-16 mx-auto" />
+                  <p className="text-lg font-bold">No shops found</p>
+                  <p className="text-sm">Try adjusting your filters</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

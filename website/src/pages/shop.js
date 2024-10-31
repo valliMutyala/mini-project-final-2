@@ -22,12 +22,43 @@ export default function Shop({shopId}) {
       .then((res) => res.json())
       .then((data) => {
         const { shop, comments } = data;
-        setShop(shop);
-        setComments(comments);
+        // setShop(shop);
+        // setComments(comments);
+        setComments(comments || demoComments);
+        setShop(shop || demoData);
       })
       .catch((error) => console.error("Error:", error))
   }, []);
 
+  const demoData = {
+    "id": 1,
+    "shopname": "Acme Shopping Mall",
+    "shoplocation": "Chennai",
+    "rating": 4.8,
+    "about": "Acme Shopping Mall is the best place to shop for all your needs. We have a wide range of products and services to cater to the varied requirements of our customers. Our staff at Acme Shopping Mall are courteous and prompt at providing any assistance. We readily answer any queries or questions that you may have. Pay for the product or service with ease by using any of the available modes of payment, such as Cash, Debit Cards, Cheques, Credit Card. This establishment is functional from 10:00 - 21:00.",
+    "images": ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
+  }
+
+  const demoComments = [
+    {
+      "id": 1,
+      "user": "Madhan",
+      "comment": "This is a great shop. I love the products and services. The staff are very helpful and friendly. I highly recommend this shop to everyone.",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "user": "John",
+      "comment": "I had a great experience shopping at this shop. The products are of high quality and the staff are very helpful and friendly. I highly recommend this shop to everyone.",
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "user": "Jane",
+      "comment": "I had a great experience shopping at this shop. The products are of high quality and the staff are very helpful and friendly. I highly recommend this shop to everyone.",
+      "rating": 5
+    }
+  ]
 
   return (
     <>
@@ -85,7 +116,7 @@ export default function Shop({shopId}) {
       <CommentBox shopId={shopId} comment={comment} setComment={setComment}/>
         <h2 className="text-2xl font-bold">Customer Reviews</h2>
         <div className="mt-6 grid gap-6">
-         {comments.map( comment => <CommentList user={"Madhan"} key={comment.id} comment={comment}/>)}
+         {comments.map( comment => <CommentList user={ comment.user } key={comment.id} comment={comment.comment}/>)}
         </div>
       </div>
     </div>

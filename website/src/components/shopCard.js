@@ -18,7 +18,7 @@ export function ShopCard({ id, name, categories, rating, reviews, image }) {
           />
           <div>
             <h3 className="text-lg font-bold">{name}</h3>
-            <p className="text-sm text-muted-foreground">{categories.join(", ")}</p>
+            <p className="text-sm text-muted-foreground">{categories}</p>
             <div className="flex items-center gap-2 mt-2">
               {Array.from({ length: 5 }).map((_, index) => (
                 <StarIcon
@@ -34,6 +34,7 @@ export function ShopCard({ id, name, categories, rating, reviews, image }) {
         <div className="mt-4 flex flex-col gap-2">
           <Link to={`/shop/${id}`} >
             <Button size="sm" className="w-full">
+              View Shop
             </Button>
           </Link>
         </div>
