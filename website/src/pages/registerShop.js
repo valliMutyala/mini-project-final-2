@@ -102,24 +102,15 @@ export function RegisterShop() {
   const handleForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-  
-    // Append each image to formData with the field name 'images'
-    const photos = formData.getAll("photos");
-    photos.forEach((photo) => {
-      formData.append("images", photo);
-    });
-  
     // Append each field individually to formData
     formData.append("shopname", formData.get("shop-name"));
-    formData.append("location", query);
     formData.append("shoptype", shopType);
-    formData.append("mobilenumber", formData.get("mobile"));
-    formData.append("email", formData.get("email"));
+    formData.append("mobilenumber", formData.get("mobile"));;
     formData.append("opentime", openingTime);
     formData.append("closetime", closingTime);
   
     // Serialize services array as JSON and append to formData
-    formData.append("services", services);
+    formData.append("services", JSON.stringify(services));
   
     try {
       const response = await fetch("http://localhost:3001/shopregister", {

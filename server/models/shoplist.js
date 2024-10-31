@@ -1,14 +1,4 @@
 const mongoose=require('mongoose')
-// const serviceSchema = new mongoose.Schema({
-  //   name: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   price: {
-  //     type: Number,
-  //     required: true,
-  //   }
-  // });
 
 const shopListSchema=new mongoose.Schema({
     shopname:{type:String,required:true},
@@ -18,10 +8,11 @@ const shopListSchema=new mongoose.Schema({
     email:{type:String,required:true},
     opentime:{type:String,required:true},
     closetime:{type:String,required:true},
+    images : [{ type: String, required: true }],
     services:[{
       service: { type: String, required: true },
       price: { type: Number, required: true }
-  }]
+    }]
 })
 
 const Shop=mongoose.model('Shop',shopListSchema)
