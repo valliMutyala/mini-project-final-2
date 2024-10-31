@@ -37,7 +37,7 @@ export function RegisterShop() {
   const [openingTime, setOpeningTime] = useState("");
   const [closingTime, setClosingTime] = useState("");
   const [shopType, setShopType] = useState("");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState("");
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState("");
@@ -83,7 +83,7 @@ export function RegisterShop() {
     setQuery(e.target.value);
     if (e.target.value.length > 2) {
       const response = await fetch(`${NominatimURL}${e.target.value}`);
-      const results = await response.json();
+      const results  = await response.json();
       setSuggestions(results);
     } else {
       setSuggestions([]);
@@ -102,10 +102,14 @@ export function RegisterShop() {
   const handleForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const photos = formData.getAll('photos');
+  
+    // Append each image to formData with the field name 'images'
+    const photos = formData.getAll("photos");
     photos.forEach((photo) => {
-      formData.append('shopimages', photo);
+      formData.append("images", photo);
     });
+  
+    // Append each field individually to formData
     formData.append("shopname", formData.get("shop-name"));
     formData.append("location", query);
     formData.append("shoptype", shopType);
@@ -113,23 +117,20 @@ export function RegisterShop() {
     formData.append("email", formData.get("email"));
     formData.append("opentime", openingTime);
     formData.append("closetime", closingTime);
-    services.forEach((service, index) => {
-      formData.append(`services[${index}][name]`, service.name);
-      formData.append(`services[${index}][price]`, service.price);
-    });
-
-    console.log(formData.get('photos'));
-
+  
+    // Serialize services array as JSON and append to formData
+    formData.append("services", services);
+  
     try {
       const response = await fetch("http://localhost:3001/shopregister", {
         method: "POST",
         body: formData,
       });
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`HTTP error! status: ${response.message}`);
       }
-
+  
       const result = await response.json();
       console.log(result);
       setSuccess("Shop registered successfully!");
@@ -139,6 +140,7 @@ export function RegisterShop() {
       setSuccess("");
     }
   };
+  
 
 
   return (
@@ -148,7 +150,7 @@ export function RegisterShop() {
           <h1 className="text-2xl font-bold mb-4">Shop Registration</h1>
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {success && <div className="text-green-500 mb-4">{success}</div>}
-          <form onSubmit={handleForm} className="grid gap-6">
+          <form onSubmit={handleForm} className="grid gap-6" method="POST">
             <div className="grid gap-2">
               <Label htmlFor="shop-name">Shop Name</Label>
               <Input id="shop-name" name="shop-name" type="text" placeholder="Enter shop name" />
