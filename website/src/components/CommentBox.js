@@ -5,12 +5,17 @@ import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
-export default function CommentBox() {
-  const [comment, setComment] = useState('')
+export default function CommentBox({shopId, comment, setComment}) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Submitting comment:', comment)
+    fetch(`http://localhost:3000/shop/${shopId}/comment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ comment })
+    })
     setComment('')
   }
 
