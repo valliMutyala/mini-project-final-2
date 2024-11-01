@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, Diameter, StarIcon } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { ShopCard } from "../components/shopCard.js";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Slider } from "../components/ui/slider.jsx";
 import { ShopsContext } from "../context/shopsContext.js";
 
@@ -11,8 +11,8 @@ export function Category() {
 
   const category = useParams().id;
 
-  const shops = useContext(ShopsContext);
-  
+  const {shops} = useContext(ShopsContext);
+
   const [distance, setDistance] = useState([0, 10]);
 
   const handleDistanceChange = (value) => {
@@ -97,8 +97,8 @@ export function Category() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {shops.filter(shop => shop.shoptype == category).map((shop, index)=> <ShopCard
-                key={shop.id || index}
-                id={shop.id || index}
+                key={index}
+                id={shop._id}
                 name={shop.shopname}
                 categories={shop.shoptype}
                 rating={shop.rating || 4}

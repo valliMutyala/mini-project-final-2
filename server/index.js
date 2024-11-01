@@ -6,12 +6,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Shop = require("./models/shoplist");
 const UserModel = require("./models/userdetails");
+const Comments = require('./models/comments');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 mongoose.connect("mongodb://localhost:27017/users");
 
@@ -111,7 +115,7 @@ app.post('/shop/:id/comment', async function (req, res) {
     const { id } = req.params;
     const { comment } = req.body;
 
-    await new Comment({
+    await new Comments({
         shopId: id,
         comment
     }).save();
@@ -119,30 +123,35 @@ app.post('/shop/:id/comment', async function (req, res) {
     res.status(201).json({ message: "Comment added" });
 });
 
-app.get('/shop/:id', function (req, res) {
+app.get('/shop/:id', async function (req, res) {
     try {
         const { id } = req.params;
-        const shop = Shop.findOne({ _id: id });
-        const comments = Comment.find({ shopId: id });
-        res
-            .status(200)
-            .json({ shop, comments });
-    }
-    catch (error) {
-        res.status(500).json({ error: "Server error" });
+        console.log(id);
+        const shop = await Shop.findById(id);
+        const comments = await Comments.find({ shopId: id });
+
+        // Construct the image URLs
+        const imageUrls = shop.images.map(imagePath => {
+            return `${req.protocol}://${req.get('host')}/uploads/${path.basename(imagePath)}`;
+        });
+
+        res.status(200).json({
+            shop: { ...shop._doc, images: imageUrls }, // Add image URLs to the shop data
+            comments
+        });
+    } catch (error) {
+        res.status(500).json(error);
     }
 });
 
-app.get("/shoplist", async (req, res) => {
+app.get("/shops/:location", async (req, res) => {
     try {
-        const userLocation = req.body.location;
-        const shops = await Shop.find({ location: userLocation });
-        res.status(200).json({ shops });
-
+        const location = req.params.location || "not found";
+        const shops = await Shop.find({ location });
+        res.status(200).json(shops);
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
 });
-
 
 app.listen(3001, () => console.log(`server running on ${3001}`));

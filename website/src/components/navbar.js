@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom"
-import { Button } from "./ui/button"
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
-export default function Navbar() {
+export default function Navbar({ isLoggedIn, onLogout }) {
   return (
     <div className="flex flex-col">
       <header className="bg-primary text-primary-foreground py-4 px-6 shadow">
@@ -11,12 +11,20 @@ export default function Navbar() {
             <span className="text-xl font-bold">Neighborhood Navigator</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
-          <Link to="/signup" className="hover:underline">
+            <Link to="/signup" className="hover:underline">
               Register
             </Link>
-            <Link to="/login" className="hover:underline">
-              Login
-            </Link>
+            {isLoggedIn ? (
+              <>
+                <Link to="/" className="hover:underline" onClick={onLogout}>
+                  Logout
+                </Link>
+              </>
+            ) : (
+              <Link to="/login" className="hover:underline">
+                Login
+              </Link>
+            )}
             <Link to="/" className="hover:underline">
               Home
             </Link>
@@ -34,7 +42,7 @@ export default function Navbar() {
         </div>
       </header>
     </div>
-  )
+  );
 }
 
 function MenuIcon(props) {
@@ -55,9 +63,8 @@ function MenuIcon(props) {
       <line x1="4" x2="20" y1="6" y2="6" />
       <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
-  )
+  );
 }
-
 
 function PhoneCallIcon(props) {
   return (
@@ -77,5 +84,5 @@ function PhoneCallIcon(props) {
       <path d="M14.05 2a9 9 0 0 1 8 7.94" />
       <path d="M14.05 6A5 5 0 0 1 18 10" />
     </svg>
-  )
+  );
 }
