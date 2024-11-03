@@ -19,7 +19,7 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            {isLoggedIn ? (
+            {isLoggedIn.isLogged ? (
               <>
                 <Link to="/" className="hover:underline">
                   Home
@@ -27,7 +27,25 @@ export default function Navbar() {
                 <Link to="/register-shop" className="hover:underline">
                   Register Shop
                 </Link>
-                <Link to="/" className="hover:underline" onClick={() => setIsLoggedIn(false)}>
+                <Link to="/shopDetailsPage" className="hover:underline" onClick={toggleMenu}>
+                  Shop Details
+                </Link>
+                {
+                  isLoggedIn.isAdmin ? (
+                    <Link to="/admin" className="hover:underline">
+                      Admin
+                    </Link>
+                  ) : null
+                }
+                <Link to="/" className="hover:underline" 
+                onClick={
+                  () => { 
+                    localStorage.removeItem('email');
+                    setIsLoggedIn({ email: '', isLogged: false }); 
+                    toggleMenu(); 
+                  } 
+                } 
+                >
                   Logout
                 </Link>
               </>
@@ -57,6 +75,16 @@ export default function Navbar() {
                 <Link to="/register-shop" className="hover:underline" onClick={toggleMenu}>
                   Register Shop
                 </Link>
+                <Link to="/shopDetailsPage" className="hover:underline" onClick={toggleMenu}>
+                  Shop Details
+                </Link>
+                {
+                  isLoggedIn.isAdmin ? (
+                    <Link to="/admin" className="hover:underline" onClick={toggleMenu}>
+                      Admin
+                    </Link>
+                  ) : null
+                }
                 <Link to="/" className="hover:underline" onClick={() => { setIsLoggedIn(false); toggleMenu(); }}>
                   Logout
                 </Link>

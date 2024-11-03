@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -7,6 +7,8 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { ShopsContext } from "../context/shopsContext";
+import { Textarea } from "../components/ui/textarea";
 
 const NominatimURL = "https://nominatim.openstreetmap.org/search?format=json&q=";
 
@@ -33,6 +35,7 @@ function RecenterAutomatically({ location }) {
 }
 
 export function RegisterShop() {
+  const { isLoggedIn } = useContext(ShopsContext);
   const [services, setServices] = useState([{ service: "", price: "" }]);
   const [openingTime, setOpeningTime] = useState("");
   const [closingTime, setClosingTime] = useState("");
@@ -97,8 +100,6 @@ export function RegisterShop() {
     setQuery(suggestion.display_name);
   };
 
-
-
   const handleForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -108,6 +109,7 @@ export function RegisterShop() {
     formData.append("mobilenumber", formData.get("mobile"));;
     formData.append("opentime", openingTime);
     formData.append("closetime", closingTime);
+    formData.append("userEmail", isLoggedIn.email);
   
     // Serialize services array as JSON and append to formData
     formData.append("services", JSON.stringify(services));
@@ -292,6 +294,10 @@ export function RegisterShop() {
                 </div>
               </div>
             </div>
+            <div className="grid gap-2">
+                <Label htmlFor="email">About</Label>
+                <Textarea id="about" name="about" type="textareac" placeholder="Enter about shop" />
+              </div>
             <button type="submit" className="w-full bg-black rounded text-white">
               Register Shop
             </button>

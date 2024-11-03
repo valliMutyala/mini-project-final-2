@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "../components/ui/carousel";
 import { ArrowLeftIcon, StarIcon } from "lucide-react";
 import CommentBox from "../components/CommentBox";
 import CommentList from "../components/commentList";
@@ -27,6 +33,9 @@ export default function Shop() {
       .catch((error) => console.error("Error:", error));
   }, [comment]);
 
+  let totalRating = shop?.averageRating || 1;
+  totalRating = totalRating.toFixed(1);
+
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 overflow-hidden">
       <Link to={`/category/${category}`} className="flex items-center gap-2 hover:underline">
@@ -37,19 +46,25 @@ export default function Shop() {
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">{shop.shopname}</h1>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">{shop.location}</p>
+          <p className="text-muted-foreground mt-2 text-sm md:text-base font-semibold">{`Type: ${shop.shoptype}`}</p>
           <div className="flex items-center gap-2 mt-4">
             <div className="flex items-center gap-0.5">
-              <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-primary" />
-              <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-primary" />
-              <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-primary" />
-              <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-primary" />
-              <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-muted stroke-muted-foreground" />
+              {Array.from({ length: 5 }).map((_, index) => (
+                <StarIcon
+                  key={index}
+                  className={`w-4 h-4 md:w-5 md:h-5 ${
+                    index < Math.floor(shop.averageRating)
+                      ? "fill-primary"
+                      : "text-muted-foreground"
+                  }`}
+                />
+              ))}
             </div>
-            <span className="text-lg font-medium">{shop?.rating}</span>
+            <span className="text-lg font-medium">{totalRating}</span>
             <span className="text-muted-foreground text-sm">{`${comments.length} reviews`}</span>
           </div>
           <div className="mt-6 md:mt-8">
-            <h2 className="text-xl md:text-2xl font-bold">{`About The ${shop.shopname}`}</h2>
+            <h2 className="text-xl md:text-2xl font-bold">{`About ${shop.shopname}`}</h2>
             <p className="mt-2 text-muted-foreground text-sm md:text-base">{shop.about}</p>
           </div>
 
@@ -59,10 +74,27 @@ export default function Shop() {
               {shop.services?.map((service, index) => (
                 <li key={index} className="flex justify-between">
                   <span className="text-muted-foreground text-sm md:text-base">{service.service}</span>
-                  <span className="text-primary font-semibold text-sm md:text-base">{`$${service.price}`}</span>
+                  <span className="text-primary font-semibold text-sm md:text-base">{`₹${service.price}`}</span>
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="mt-6 md:mt-8">
+            <h2 className="text-xl md:text-2xl font-bold">Contact Information</h2>
+            <p className="mt-2 text-muted-foreground text-sm md:text-base">
+              <strong>Email:</strong> {shop.email}
+            </p>
+            <p className="mt-2 text-muted-foreground text-sm md:text-base">
+              <strong>Phone:</strong> {shop.mobilenumber}
+            </p>
+          </div>
+
+          <div className="mt-6 md:mt-8">
+            <h2 className="text-xl md:text-2xl font-bold">Opening Hours</h2>
+            <p className="mt-2 text-muted-foreground text-sm md:text-base">
+              <strong>Open:</strong> {shop.opentime} <strong>Close:</strong> {shop.closetime}
+            </p>
           </div>
         </div>
         <div className="md:order-2 order-1 overflow-hidden">
@@ -70,7 +102,11 @@ export default function Shop() {
             <CarouselContent>
               {shop.images?.map((image, index) => (
                 <CarouselItem key={index}>
-                  <img src={image} alt={`Shop Image ${index + 1}`} className="w-full h-auto max-h-72 md:max-h-96 object-cover rounded-md max-w-full" />
+                  <img
+                    src={image}
+                    alt={`Shop Image ${index + 1}`}
+                    className="w-full h-auto max-h-72 md:max-h-96 object-cover rounded-md max-w-full"
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -84,7 +120,12 @@ export default function Shop() {
         <h2 className="text-xl md:text-2xl font-bold mt-6">Customer Reviews</h2>
         <div className="mt-4 md:mt-6 grid gap-4 md:gap-6">
           {comments.map((comment) => (
-            <CommentList user={comment.user} key={comment.id} comment={comment.comment} />
+            <CommentList
+              username={comment.username}
+              key={comment.id}
+              comment={comment.comment}
+              rating={comment.rating}
+            />
           ))}
         </div>
       </div>

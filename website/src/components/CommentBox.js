@@ -1,11 +1,12 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { ShopsContext } from '../context/shopsContext'
 
 export default function CommentBox({ shopId, setComment, comment }) {
-
+  const {isLoggedIn : {email}} = useContext(ShopsContext);
   const [rating, setRating] = useState(0);
 
   const handleSubmit = async (e) => {
@@ -21,7 +22,7 @@ export default function CommentBox({ shopId, setComment, comment }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ comment, rating })
+        body: JSON.stringify({ comment, rating, email })
       });
       
       if (response.ok) {
