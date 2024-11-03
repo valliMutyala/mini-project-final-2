@@ -8,16 +8,16 @@ import Dashboard from './components/dashboard';
 import Shop from './pages/shop';
 import { RegisterShop } from './pages/registerShop';
 import { Category } from './pages/category';
-import Login from './pages/login';
-import Register from './pages/register';
 import { useState, useEffect } from 'react';
 import { ShopsContext } from './context/shopsContext';
+import LandingPage from './pages/loginAndSignup';
 
 
 function App() {
 
   const [shops, setShops] = useState([]);
   const [location, setLocation] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     async function loadShops(location) {
       await fetch(`http://localhost:3001/shops/${location}`, {
@@ -42,23 +42,31 @@ function App() {
       <ShopsContext.Provider value={{
         shops,
         location,
+        isLoggedIn,
+        setIsLoggedIn,
       }}>
         <BrowserRouter>
+        {(isLoggedIn ?
           <Routes>
-            <Route path='/' element={<MainLayout />}>
-              <Route index element={<Dashboard setLocation={setLocation} location={location} />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<Register />} />
-              <Route path='/about' element={<About />} />
-              <Route path='/contact' element={<Contact />} />
-              <Route path='/shop/:id/:category' element={<Shop />} />
-              <Route path="/category" element={<Category />}>
-                <Route path=':id' element={<h1>Madhan</h1>} />
-              </Route>
-              <Route path='/register-shop' element={<RegisterShop />} />
+            <Route path="/" element={<MainLayout />}>
+              <Route path="/" element={<Dashboard setLocation={setLocation} location={location}/>} />
+              <Route path="/shop/:id/:category" element={<Shop />} />
+              <Route path="/registershop" element={<RegisterShop />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/category/:id" element={<Category />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
-            <Route path='/*' element={<NotFoundPage />} />
           </Routes>
+          :
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route index path="/" element={<LandingPage />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<LandingPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        )}
         </BrowserRouter>
       </ShopsContext.Provider>
     </>

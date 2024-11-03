@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/footer";
 
-export default function MainLayout(){
+export default function MainLayout({setIsLoggedIn, isLoggedIn}){
     const [location, setLocation] = useState(null);
     const [data, setData] = useState(null)
 
@@ -34,7 +34,10 @@ export default function MainLayout(){
     }, [])
     return(
         <>
-            <Navbar/>
+            <Navbar 
+            isLoggedIn={isLoggedIn} 
+            setIsLoggedIn={setIsLoggedIn}
+            />
             <main>
                 <Outlet/>
             </main>

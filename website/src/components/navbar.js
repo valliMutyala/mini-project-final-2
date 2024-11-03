@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useContext, useState } from "react";
+import { ShopsContext } from "../context/shopsContext";
 
-export default function Navbar({ isLoggedIn, onLogout }) {
+export default function Navbar() {
+  const { isLoggedIn, setIsLoggedIn } = useContext(ShopsContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <div className="flex flex-col">
       <header className="bg-primary text-primary-foreground py-4 px-6 shadow">
@@ -10,36 +17,60 @@ export default function Navbar({ isLoggedIn, onLogout }) {
             <PhoneCallIcon className="h-8 w-8" />
             <span className="text-xl font-bold">Neighborhood Navigator</span>
           </Link>
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/signup" className="hover:underline">
-              Register
-            </Link>
             {isLoggedIn ? (
               <>
-                <Link to="/" className="hover:underline" onClick={onLogout}>
+                <Link to="/" className="hover:underline">
+                  Home
+                </Link>
+                <Link to="/register-shop" className="hover:underline">
+                  Register Shop
+                </Link>
+                <Link to="/" className="hover:underline" onClick={() => setIsLoggedIn(false)}>
                   Logout
                 </Link>
               </>
             ) : (
               <Link to="/login" className="hover:underline">
-                Login
+                Login/Signup
               </Link>
             )}
-            <Link to="/" className="hover:underline">
-              Home
-            </Link>
-            <Link to="/register-shop" className="hover:underline">
-              Register Shop
-            </Link>
             <Link to="/about" className="hover:underline">
               About
             </Link>
           </nav>
-          <Button variant="outline" className="md:hidden">
+          {/* Mobile Menu Button */}
+          <Button variant="outline" className="md:hidden" onClick={toggleMenu}>
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
         </div>
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <nav className="flex flex-col md:hidden bg-primary text-primary-foreground py-4 px-6">
+            {isLoggedIn ? (
+              <>
+                <Link to="/" className="hover:underline" onClick={toggleMenu}>
+                  Home
+                </Link>
+                <Link to="/register-shop" className="hover:underline" onClick={toggleMenu}>
+                  Register Shop
+                </Link>
+                <Link to="/" className="hover:underline" onClick={() => { setIsLoggedIn(false); toggleMenu(); }}>
+                  Logout
+                </Link>
+              </>
+            ) : (
+              <Link to="/login" className="hover:underline" onClick={toggleMenu}>
+                Login/Signup
+              </Link>
+            )}
+            <Link to="/about" className="hover:underline" onClick={toggleMenu}>
+              About
+            </Link>
+          </nav>
+        )}
       </header>
     </div>
   );
@@ -59,9 +90,9 @@ function MenuIcon(props) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
+      <line className="text-black" x1="4" x2="20" y1="12" y2="12" />
+      <line className="text-black" x1="4" x2="20" y1="6" y2="6" />
+      <line className="text-black" x1="4" x2="20" y1="18" y2="18" />
     </svg>
   );
 }

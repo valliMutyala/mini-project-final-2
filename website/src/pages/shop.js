@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../components/ui/carousel";
-import { ArrowLeft, ArrowLeftIcon, StarIcon } from "lucide-react";
+import { ArrowLeftIcon, StarIcon } from "lucide-react";
 import CommentBox from "../components/CommentBox";
 import CommentList from "../components/commentList";
 
 export default function Shop() {
-  const shopId = useParams().id;
-  const category = useParams().category;
+  const { id: shopId, category } = useParams();
   const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
   const [shop, setShop] = useState({});
 
   useEffect(() => {
@@ -25,15 +25,15 @@ export default function Shop() {
         setComments(comments);
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [comment]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
-      <Link to={`/category/${category}`} className="flex items-center gap-2 hover:underline" >
+    <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 overflow-hidden">
+      <Link to={`/category/${category}`} className="flex items-center gap-2 hover:underline">
         <ArrowLeftIcon className="h-5 w-5" />
         <span>Back</span>
       </Link>
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2 mt-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">{shop.shopname}</h1>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">{shop.location}</p>
@@ -53,7 +53,6 @@ export default function Shop() {
             <p className="mt-2 text-muted-foreground text-sm md:text-base">{shop.about}</p>
           </div>
 
-          {/* Services Section */}
           <div className="mt-6 md:mt-8">
             <h2 className="text-xl md:text-2xl font-bold">Services Offered</h2>
             <ul className="mt-4 space-y-2">
@@ -66,12 +65,12 @@ export default function Shop() {
             </ul>
           </div>
         </div>
-        <div>
-          <Carousel className="w-full">
+        <div className="md:order-2 order-1 overflow-hidden">
+          <Carousel className="w-full overflow-hidden">
             <CarouselContent>
               {shop.images?.map((image, index) => (
                 <CarouselItem key={index}>
-                  <img src={image} alt={`Shop Image ${index + 1}`} className="w-full h-auto max-h-72 md:max-h-96 object-cover rounded-md" />
+                  <img src={image} alt={`Shop Image ${index + 1}`} className="w-full h-auto max-h-72 md:max-h-96 object-cover rounded-md max-w-full" />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -81,7 +80,7 @@ export default function Shop() {
         </div>
       </div>
       <div className="mt-12">
-        <CommentBox shopId={shopId} />
+        <CommentBox shopId={shopId} comment={comment} setComment={setComment} />
         <h2 className="text-xl md:text-2xl font-bold mt-6">Customer Reviews</h2>
         <div className="mt-4 md:mt-6 grid gap-4 md:gap-6">
           {comments.map((comment) => (

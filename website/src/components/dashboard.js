@@ -130,7 +130,6 @@ export default function Dashboard({setLocation, location}) {
             </div>
           </div>
 
-          {/* Categories */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link
               to="category/food"

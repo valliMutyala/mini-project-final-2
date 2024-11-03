@@ -4,8 +4,8 @@ import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
-export default function CommentBox({ shopId }) {
-  const [comment, setComment] = useState("");
+export default function CommentBox({ shopId, setComment, comment }) {
+
   const [rating, setRating] = useState(0);
 
   const handleSubmit = async (e) => {
